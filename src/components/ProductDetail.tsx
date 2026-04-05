@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Star, ArrowLeft, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import type { Product, SkinType, Concern } from "@/data/mockData";
 import { SKIN_TYPES, CONCERNS } from "@/data/mockData";
 import ReviewCard from "./ReviewCard";
