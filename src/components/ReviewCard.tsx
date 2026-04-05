@@ -14,7 +14,7 @@ const StarRating = ({ rating }: { rating: number }) => (
     {[1, 2, 3, 4, 5].map((i) => (
       <Star
         key={i}
-        className={`w-3.5 h-3.5 ${
+        className={`w-3 h-3 ${
           i <= rating ? "fill-amber-400 text-amber-400" : "text-border fill-border"
         }`}
       />
@@ -28,55 +28,33 @@ interface ReviewCardProps {
 
 const ReviewCard = ({ review }: ReviewCardProps) => {
   return (
-    <div className="border border-border rounded-xl p-4 bg-card space-y-3">
-      {/* Top row: rating + author + skin type */}
+    <div className="border border-border rounded-xl p-4 bg-card space-y-2.5">
+      {/* Top row */}
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <StarRating rating={review.rating} />
           <span className="text-xs font-medium text-muted-foreground">{review.authorName}</span>
         </div>
         <span
-          className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+          className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
             skinTypeBgClass[review.skinType] || "bg-muted text-foreground"
           }`}
         >
-          {review.skinType} skin
+          {review.skinType}
         </span>
       </div>
 
-      {/* Metadata chips */}
-      <div className="flex flex-wrap gap-1.5">
-        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
-          <Clock className="w-3 h-3" />
-          {review.usagePeriod}
-        </span>
-        <span
-          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${
-            review.wouldBuyAgain
-              ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
-              : "bg-red-50 text-red-600 border border-red-200"
-          }`}
-        >
-          <RefreshCw className="w-3 h-3" />
-          {review.wouldBuyAgain ? "Would buy again" : "Would not rebuy"}
-        </span>
-        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-md">
-          <ShoppingBag className="w-3 h-3" />
-          {review.purchasedAt}
-        </span>
-      </div>
+      {/* Review text */}
+      <p className="text-sm leading-[1.7] text-foreground/80">{review.text}</p>
 
       {/* Helped with */}
       {review.helpedWith && review.helpedWith.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <Zap className="w-3 h-3 text-primary" />
-            Helped with:
-          </span>
+        <div className="flex flex-wrap items-center gap-1">
+          <Zap className="w-3 h-3 text-primary shrink-0" />
           {review.helpedWith.map((item) => (
             <span
               key={item}
-              className="text-xs bg-primary/10 text-foreground px-2 py-0.5 rounded-md font-medium"
+              className="text-[11px] bg-primary/8 text-foreground px-2 py-0.5 rounded-md font-medium"
             >
               {item}
             </span>
@@ -84,8 +62,28 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
         </div>
       )}
 
-      {/* Review text */}
-      <p className="text-sm leading-relaxed text-foreground/85">{review.text}</p>
+      {/* Metadata row */}
+      <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-border/60">
+        {/* Repurchase — strongest signal */}
+        <span
+          className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md ${
+            review.wouldBuyAgain
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+              : "bg-red-50 text-red-600 border border-red-100"
+          }`}
+        >
+          <RefreshCw className="w-3 h-3" />
+          {review.wouldBuyAgain ? "Would rebuy" : "Would not rebuy"}
+        </span>
+        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
+          <Clock className="w-3 h-3" />
+          {review.usagePeriod}
+        </span>
+        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/70">
+          <ShoppingBag className="w-3 h-3" />
+          {review.purchasedAt}
+        </span>
+      </div>
     </div>
   );
 };
