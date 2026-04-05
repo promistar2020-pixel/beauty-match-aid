@@ -12,7 +12,7 @@ interface SmartMatchProps {
 const trustPoints = [
   { icon: Users, text: "Matched by skin type & concern" },
   { icon: Star, text: "Real reviews with usage details" },
-  { icon: BarChart3, text: "Smarter than generic star ratings" },
+  { icon: BarChart3, text: "Smarter than generic ratings" },
 ];
 
 const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchProps) => {
@@ -24,32 +24,32 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
   };
 
   return (
-    <section className="hero-gradient py-16 px-4 sm:py-24">
-      <div className="container max-w-2xl text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-foreground mb-4 leading-tight">
+    <section className="hero-gradient py-10 px-4 sm:py-14">
+      <div className="container max-w-xl text-center">
+        <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-foreground mb-3 leading-snug tracking-tight">
           Find skincare that worked for
           <br />
-          <span className="text-primary">people with your exact skin concerns</span>
+          <span className="text-primary">people with your exact skin</span>
         </h1>
-        <p className="text-muted-foreground text-base sm:text-lg mb-10 max-w-lg mx-auto leading-relaxed">
+        <p className="text-muted-foreground text-sm sm:text-base mb-8 max-w-md mx-auto leading-relaxed">
           Browse products reviewed by people with the same skin type, breakouts, and real usage experience.
         </p>
 
-        <div className="bg-card rounded-2xl shadow-card p-6 sm:p-8 text-left space-y-6">
+        <div className="bg-card rounded-2xl shadow-card p-5 sm:p-6 text-left space-y-5">
           {/* Concern */}
           <div>
-            <label className="text-sm font-medium text-muted-foreground mb-2.5 block">
-              What's your main concern?
+            <label className="text-xs font-medium text-muted-foreground mb-2 block uppercase tracking-wider">
+              Main concern
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {CONCERNS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setConcern(c)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                  className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 border ${
                     concern === c
-                      ? "bg-primary/15 border-primary text-foreground shadow-sm"
-                      : "bg-background border-border text-muted-foreground hover:border-primary/40"
+                      ? "bg-primary/12 border-primary/50 text-foreground ring-1 ring-primary/20"
+                      : "bg-background border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
                   }`}
                 >
                   {c}
@@ -60,18 +60,18 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
 
           {/* Skin Type */}
           <div>
-            <label className="text-sm font-medium text-muted-foreground mb-2.5 block">
-              Your skin type
+            <label className="text-xs font-medium text-muted-foreground mb-2 block uppercase tracking-wider">
+              Skin type
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {SKIN_TYPES.map((st) => (
                 <button
                   key={st}
                   onClick={() => setSkinType(st)}
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border ${
+                  className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 border ${
                     skinType === st
-                      ? "bg-primary/15 border-primary text-foreground shadow-sm"
-                      : "bg-background border-border text-muted-foreground hover:border-primary/40"
+                      ? "bg-primary/12 border-primary/50 text-foreground ring-1 ring-primary/20"
+                      : "bg-background border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
                   }`}
                 >
                   {st}
@@ -83,7 +83,7 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
           <Button
             onClick={handleMatch}
             size="lg"
-            className="w-full bg-foreground text-background hover:bg-foreground/90 text-base font-semibold rounded-xl h-12"
+            className="w-full bg-[hsl(var(--cta-bg))] text-background hover:bg-[hsl(var(--cta-bg))]/90 text-sm font-semibold rounded-xl h-11"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             Find My Match
@@ -91,11 +91,11 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
         </div>
 
         {/* Trust micro-points */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-6">
           {trustPoints.map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-2 text-muted-foreground">
-              <Icon className="w-4 h-4 text-primary" />
-              <span className="text-xs sm:text-sm font-medium">{text}</span>
+            <div key={text} className="flex items-center gap-1.5 text-muted-foreground">
+              <Icon className="w-3.5 h-3.5 text-primary" />
+              <span className="text-xs font-medium">{text}</span>
             </div>
           ))}
         </div>
