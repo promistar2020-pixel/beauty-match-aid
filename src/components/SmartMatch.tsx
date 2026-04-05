@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { SKIN_TYPES, CONCERNS, type SkinType, type Concern } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Users, Star, BarChart3 } from "lucide-react";
 
 interface SmartMatchProps {
   onMatch: (concern: Concern, skinType: SkinType) => void;
   selectedConcern: Concern;
   selectedSkinType: SkinType;
 }
+
+const trustPoints = [
+  { icon: Users, text: "Matched by skin type & concern" },
+  { icon: Star, text: "Real reviews with usage details" },
+  { icon: BarChart3, text: "Smarter than generic star ratings" },
+];
 
 const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchProps) => {
   const [concern, setConcern] = useState<Concern>(selectedConcern);
@@ -20,13 +26,13 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
   return (
     <section className="hero-gradient py-16 px-4 sm:py-24">
       <div className="container max-w-2xl text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-foreground mb-3 leading-tight">
-          Find products that work
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-semibold text-foreground mb-4 leading-tight">
+          Find skincare that worked for
           <br />
-          <span className="text-primary">for skin like yours</span>
+          <span className="text-primary">people with your exact skin concerns</span>
         </h1>
-        <p className="text-muted-foreground text-base sm:text-lg mb-10 max-w-md mx-auto">
-          Real reviews from people with the same skin type and concerns.
+        <p className="text-muted-foreground text-base sm:text-lg mb-10 max-w-lg mx-auto leading-relaxed">
+          Browse products reviewed by people with the same skin type, breakouts, and real usage experience.
         </p>
 
         <div className="bg-card rounded-2xl shadow-card p-6 sm:p-8 text-left space-y-6">
@@ -82,6 +88,16 @@ const SmartMatch = ({ onMatch, selectedConcern, selectedSkinType }: SmartMatchPr
             <Sparkles className="w-4 h-4 mr-2" />
             Find My Match
           </Button>
+        </div>
+
+        {/* Trust micro-points */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-8">
+          {trustPoints.map(({ icon: Icon, text }) => (
+            <div key={text} className="flex items-center gap-2 text-muted-foreground">
+              <Icon className="w-4 h-4 text-primary" />
+              <span className="text-xs sm:text-sm font-medium">{text}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

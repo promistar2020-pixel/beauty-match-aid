@@ -1,4 +1,4 @@
-import { Star, ShoppingBag, RefreshCw, Clock } from "lucide-react";
+import { Star, ShoppingBag, RefreshCw, Clock, Zap } from "lucide-react";
 import type { Review } from "@/data/mockData";
 
 const skinTypeBgClass: Record<string, string> = {
@@ -29,7 +29,7 @@ interface ReviewCardProps {
 const ReviewCard = ({ review }: ReviewCardProps) => {
   return (
     <div className="border border-border rounded-xl p-4 bg-card space-y-3">
-      {/* Top row */}
+      {/* Top row: rating + author + skin type */}
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2.5">
           <StarRating rating={review.rating} />
@@ -40,7 +40,7 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
             skinTypeBgClass[review.skinType] || "bg-muted text-foreground"
           }`}
         >
-          {review.skinType}
+          {review.skinType} skin
         </span>
       </div>
 
@@ -51,10 +51,10 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
           {review.usagePeriod}
         </span>
         <span
-          className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-md ${
+          className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${
             review.wouldBuyAgain
-              ? "bg-emerald-50 text-emerald-700"
-              : "bg-red-50 text-red-600"
+              ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+              : "bg-red-50 text-red-600 border border-red-200"
           }`}
         >
           <RefreshCw className="w-3 h-3" />
@@ -65,6 +65,24 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
           {review.purchasedAt}
         </span>
       </div>
+
+      {/* Helped with */}
+      {review.helpedWith && review.helpedWith.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs text-muted-foreground flex items-center gap-1">
+            <Zap className="w-3 h-3 text-primary" />
+            Helped with:
+          </span>
+          {review.helpedWith.map((item) => (
+            <span
+              key={item}
+              className="text-xs bg-primary/10 text-foreground px-2 py-0.5 rounded-md font-medium"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Review text */}
       <p className="text-sm leading-relaxed text-foreground/85">{review.text}</p>
