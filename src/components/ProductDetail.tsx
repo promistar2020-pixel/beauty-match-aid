@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Star, ArrowLeft, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
+import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
 import { SKIN_TYPES, CONCERNS } from "@/data/mockData";
