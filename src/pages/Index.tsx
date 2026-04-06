@@ -4,7 +4,6 @@ import SmartMatch from "@/components/SmartMatch";
 import SocialProof from "@/components/SocialProof";
 import ProductFeed from "@/components/ProductFeed";
 import ProductDetail from "@/components/ProductDetail";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getFilteredProducts, type SkinType, type Concern, type Product } from "@/data/mockData";
 
 const Index = () => {
@@ -35,6 +34,11 @@ const Index = () => {
 
   const handleProductSelect = (product: Product) => {
     setSelectedProduct(product);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleBack = () => {
+    setSelectedProduct(null);
   };
 
   const filteredProducts = getFilteredProducts(concern, skinType);
@@ -45,6 +49,28 @@ const Index = () => {
     );
     return exact.length === 0;
   });
+
+  // Full-page product detail view
+  if (selectedProduct) {
+    return (
+      <div className="min-h-screen bg-background animate-fade-in">
+        <Header />
+        <div className="max-w-2xl mx-auto px-4">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors py-4"
+          >
+            <span className="text-base">←</span>
+            <span>Back to results</span>
+          </button>
+          <ProductDetail product={selectedProduct} />
+        </div>
+        <footer className="text-center py-8 text-xs text-muted-foreground border-t mt-8">
+          © 2026 glowr · All rights reserved
+        </footer>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -77,15 +103,6 @@ const Index = () => {
           )
         )}
       </div>
-
-      {/* Product detail modal */}
-      <Dialog open={!!selectedProduct} onOpenChange={(open) => { if (!open) setSelectedProduct(null); }}>
-        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-0 gap-0 rounded-2xl border-border">
-          {selectedProduct && (
-            <ProductDetail product={selectedProduct} onBack={() => setSelectedProduct(null)} />
-          )}
-        </DialogContent>
-      </Dialog>
 
       <footer className="text-center py-8 text-xs text-muted-foreground border-t">
         © 2026 glowr · All rights reserved
