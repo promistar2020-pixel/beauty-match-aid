@@ -88,6 +88,7 @@ const Index = () => {
               skinType={skinType}
               concern={concern}
               isWeakMatch={isWeakMatch}
+              onProductSelect={handleProductSelect}
             />
           )
         )}
