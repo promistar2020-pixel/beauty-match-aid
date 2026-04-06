@@ -34,7 +34,7 @@ const Index = () => {
 
   const handleProductSelect = (product: Product) => {
     setSelectedProduct(product);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   };
 
   const handleBack = () => {
