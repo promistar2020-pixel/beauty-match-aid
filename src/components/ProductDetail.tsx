@@ -7,10 +7,10 @@ import ReviewCard from "./ReviewCard";
 
 interface ProductDetailProps {
   product: Product;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
-const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
+const ProductDetail = ({ product }: ProductDetailProps) => {
   const [filterSkinType, setFilterSkinType] = useState<SkinType | null>(null);
   const [filterConcern, setFilterConcern] = useState<Concern | null>(null);
 
