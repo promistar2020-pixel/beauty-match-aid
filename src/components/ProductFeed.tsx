@@ -6,9 +6,10 @@ interface ProductFeedProps {
   skinType: SkinType | null;
   concern: Concern | null;
   isWeakMatch?: boolean;
+  onProductSelect?: (product: Product) => void;
 }
 
-const ProductFeed = ({ products, skinType, concern, isWeakMatch }: ProductFeedProps) => {
+const ProductFeed = ({ products, skinType, concern, isWeakMatch, onProductSelect }: ProductFeedProps) => {
   if (products.length === 0) {
     return (
       <div className="text-center py-16 text-muted-foreground">
@@ -43,6 +44,7 @@ const ProductFeed = ({ products, skinType, concern, isWeakMatch }: ProductFeedPr
             selectedSkinType={skinType}
             selectedConcern={concern}
             index={i}
+            onSelect={onProductSelect}
           />
         ))}
       </div>
