@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Star, ArrowLeft, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
+import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
 import { SKIN_TYPES, CONCERNS } from "@/data/mockData";
@@ -7,10 +7,10 @@ import ReviewCard from "./ReviewCard";
 
 interface ProductDetailProps {
   product: Product;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
-const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
+const ProductDetail = ({ product }: ProductDetailProps) => {
   const [filterSkinType, setFilterSkinType] = useState<SkinType | null>(null);
   const [filterConcern, setFilterConcern] = useState<Concern | null>(null);
 
@@ -54,14 +54,7 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
   const reviewConcerns = CONCERNS.filter((c) => product.reviews.some((r) => r.concernTags.includes(c)));
 
   return (
-    <section className="container py-8 sm:py-10 max-w-2xl animate-fade-in">
-      <button
-        onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-5 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to search
-      </button>
+    <section className="py-6 sm:py-8 px-5 sm:px-6 max-w-2xl animate-fade-in">
 
       {/* Product header */}
       <div className="bg-card rounded-2xl border border-border shadow-card overflow-hidden">

@@ -4,15 +4,13 @@ import SmartMatch from "@/components/SmartMatch";
 import SocialProof from "@/components/SocialProof";
 import ProductFeed from "@/components/ProductFeed";
 import ProductDetail from "@/components/ProductDetail";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { getFilteredProducts, type SkinType, type Concern, type Product } from "@/data/mockData";
-
-type View = "feed" | "detail";
 
 const Index = () => {
   const [concern, setConcern] = useState<Concern>("Acne / Breakouts");
   const [skinType, setSkinType] = useState<SkinType>("Oily");
   const [matched, setMatched] = useState(true);
-  const [view, setView] = useState<View>("feed");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [transitioning, setTransitioning] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -28,7 +26,6 @@ const Index = () => {
     setConcern(c);
     setSkinType(st);
     setMatched(true);
-    setView("feed");
     setSelectedProduct(null);
     setTimeout(() => {
       setTransitioning(false);
@@ -37,18 +34,7 @@ const Index = () => {
   };
 
   const handleProductSelect = (product: Product) => {
-    setTransitioning(true);
     setSelectedProduct(product);
-    setView("detail");
-    setTimeout(() => {
-      setTransitioning(false);
-      scrollToResults();
-    }, 300);
-  };
-
-  const handleBackToSearch = () => {
-    setView("feed");
-    setSelectedProduct(null);
   };
 
   const filteredProducts = getFilteredProducts(concern, skinType);
@@ -79,8 +65,6 @@ const Index = () => {
               <span className="text-xs text-muted-foreground">Finding your matches…</span>
             </div>
           </div>
-        ) : view === "detail" && selectedProduct ? (
-          <ProductDetail product={selectedProduct} onBack={handleBackToSearch} />
         ) : (
           matched && (
             <ProductFeed
@@ -93,6 +77,15 @@ const Index = () => {
           )
         )}
       </div>
+
+      {/* Product detail modal */}
+      <Dialog open={!!selectedProduct} onOpenChange={(open) => { if (!open) setSelectedProduct(null); }}>
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto p-0 gap-0 rounded-2xl border-border">
+          {selectedProduct && (
+            <ProductDetail product={selectedProduct} onBack={() => setSelectedProduct(null)} />
+          )}
+        </DialogContent>
+      </Dialog>
 
       <footer className="text-center py-8 text-xs text-muted-foreground border-t">
         © 2026 glowr · All rights reserved
