@@ -54,7 +54,7 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
   const reviewConcerns = CONCERNS.filter((c) => product.reviews.some((r) => r.concernTags.includes(c)));
 
   return (
-    <section className="container py-8 sm:py-10 max-w-2xl animate-fade-in-up">
+    <section className="container py-8 sm:py-10 max-w-2xl animate-fade-in">
       <button
         onClick={onBack}
         className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-5 transition-colors"

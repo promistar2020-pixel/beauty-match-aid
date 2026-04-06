@@ -19,9 +19,9 @@ const ProductFeed = ({ products, skinType, concern, isWeakMatch }: ProductFeedPr
   }
 
   return (
-    <section className="container py-8 sm:py-12">
+    <section className="container py-8 sm:py-12 animate-fade-in">
       <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-1 text-center tracking-tight">
-        Your Recommended Products
+        Results for {skinType} skin + {concern}
       </h2>
       <p className="text-muted-foreground text-sm text-center mb-6 max-w-sm mx-auto">
         Ranked by ratings from people with similar skin
