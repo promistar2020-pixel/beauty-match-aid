@@ -47,24 +47,28 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
       {/* Review text */}
       <p className="text-sm leading-[1.7] text-foreground/80">{review.text}</p>
 
-      {/* Helped with */}
+      {/* Helped with — bullet list */}
       {review.helpedWith && review.helpedWith.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1">
-          <Zap className="w-3 h-3 text-primary shrink-0" />
-          {review.helpedWith.map((item) => (
-            <span
-              key={item}
-              className="text-[11px] bg-primary/8 text-foreground px-2 py-0.5 rounded-md font-medium"
-            >
-              {item}
-            </span>
-          ))}
+        <div className="space-y-1">
+          <div className="flex items-center gap-1">
+            <Zap className="w-3 h-3 text-primary shrink-0" />
+            <span className="text-[11px] font-semibold text-foreground">Helped with</span>
+          </div>
+          <ul className="ml-4 space-y-0.5">
+            {review.helpedWith.map((item) => (
+              <li
+                key={item}
+                className="text-[12px] text-foreground/75 list-disc"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
 
       {/* Metadata row */}
       <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-border/60">
-        {/* Repurchase — strongest signal */}
         <span
           className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md ${
             review.wouldBuyAgain

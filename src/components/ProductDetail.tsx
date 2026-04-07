@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles } from "lucide-react";
+import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles, CheckCircle2 } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
 import { SKIN_TYPES, CONCERNS } from "@/data/mockData";
@@ -22,10 +22,8 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
     });
   }, [product.reviews, filterSkinType, filterConcern]);
 
-  // Summary stats
-  const rebuyRate = Math.round(
-    (product.reviews.filter((r) => r.wouldBuyAgain).length / product.reviews.length) * 100
-  );
+  const rebuyCount = product.reviews.filter((r) => r.wouldBuyAgain).length;
+  const rebuyRate = Math.round((rebuyCount / product.reviews.length) * 100);
 
   const skinTypeCounts = product.reviews.reduce<Record<string, number>>((acc, r) => {
     acc[r.skinType] = (acc[r.skinType] || 0) + 1;
@@ -34,6 +32,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   const topSkinTypes = Object.entries(skinTypeCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
+  const topSkinType = topSkinTypes[0];
 
   const concernCounts = product.reviews.reduce<Record<string, number>>((acc, r) => {
     r.concernTags.forEach((c) => { acc[c] = (acc[c] || 0) + 1; });
@@ -49,7 +48,37 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   }, {});
   const topPurchase = Object.entries(purchaseCounts).sort((a, b) => b[1] - a[1]);
 
-  // Skin types and concerns present in reviews
+  // "Why people like you choose this" insights
+  const allHelpedWith = product.reviews.flatMap((r) => r.helpedWith);
+  const helpedCounts = allHelpedWith.reduce<Record<string, number>>((acc, h) => {
+    acc[h] = (acc[h] || 0) + 1;
+    return acc;
+  }, {});
+  const topHelped = Object.entries(helpedCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([item]) => item);
+
+  const noNegativeSkinTypes = Object.entries(skinTypeCounts)
+    .filter(([st]) => {
+      const stReviews = product.reviews.filter((r) => r.skinType === st);
+      return stReviews.every((r) => r.rating >= 4);
+    })
+    .map(([st]) => st);
+
+  const whyReasons: string[] = [];
+  topHelped.forEach((h) => whyReasons.push(h));
+  if (noNegativeSkinTypes.length > 0) {
+    whyReasons.push(`Suitable for ${noNegativeSkinTypes.join(", ").toLowerCase()} skin`);
+  }
+  const noIssueKeywords = ["dryness", "irritation", "stinging", "stripping"];
+  const hasNoDryness = !product.reviews.some((r) =>
+    r.text.toLowerCase().includes("drying") && r.rating >= 4
+  );
+  if (hasNoDryness && whyReasons.length < 4) {
+    whyReasons.push("No dryness reported by satisfied users");
+  }
+
   const reviewSkinTypes = SKIN_TYPES.filter((st) => product.reviews.some((r) => r.skinType === st));
   const reviewConcerns = CONCERNS.filter((c) => product.reviews.some((r) => r.concernTags.includes(c)));
 
@@ -58,7 +87,6 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
 
       {/* Product header */}
       <div className="bg-card rounded-2xl border border-border shadow-card overflow-hidden">
-        {/* Visual */}
         <div className="h-36 sm:h-44 bg-gradient-to-br from-accent/50 via-secondary/20 to-primary/5 flex items-center justify-center">
           <div className="w-16 h-20 rounded-xl bg-background/60 backdrop-blur-sm border border-border/40 flex items-center justify-center">
             <Droplets className="w-7 h-7 text-primary/50" />
@@ -71,7 +99,13 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
             <span className="text-[11px] text-muted-foreground">· {product.category}</span>
           </div>
           <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-1 leading-snug">{product.name}</h2>
-          <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{product.bestFor}</p>
+
+          {/* Best for */}
+          <p className="text-sm text-primary/80 font-medium mb-2">
+            Best for: {product.bestFor}
+          </p>
+
+          <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{product.shortDescription}</p>
 
           <div className="flex items-center gap-3 mb-4">
             <div className="flex items-center gap-1">
@@ -91,14 +125,38 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
         </div>
       </div>
 
+      {/* Why people like you choose this */}
+      {whyReasons.length > 0 && (
+        <div className="bg-card rounded-xl border border-border p-4 mt-4">
+          <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            Why people like you choose this
+          </h3>
+          <ul className="space-y-1.5">
+            {whyReasons.slice(0, 4).map((reason) => (
+              <li key={reason} className="flex items-start gap-2 text-sm text-foreground/80">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                <span>{reason}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Summary signals */}
-      <div className="grid grid-cols-2 gap-3 mt-5">
+      <div className="grid grid-cols-2 gap-3 mt-4">
         <div className="bg-card rounded-xl border border-border p-3.5">
           <div className="flex items-center gap-1.5 mb-1.5">
             <RefreshCw className="w-3.5 h-3.5 text-emerald-600" />
             <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Rebuy rate</span>
           </div>
           <span className="text-xl font-semibold text-foreground">{rebuyRate}%</span>
+          {topSkinType && (
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              {rebuyCount} of {product.reviews.length} would buy again
+              {topSkinType[1] > 1 ? ` (${topSkinType[1]} with ${topSkinType[0].toLowerCase()} skin)` : ""}
+            </p>
+          )}
         </div>
         <div className="bg-card rounded-xl border border-border p-3.5">
           <div className="flex items-center gap-1.5 mb-1.5">
