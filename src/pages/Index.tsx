@@ -63,7 +63,7 @@ const Index = () => {
             <span className="text-base">←</span>
             <span>Back to results</span>
           </button>
-          <ProductDetail product={selectedProduct} />
+          <ProductDetail product={selectedProduct} onSelectProduct={handleProductSelect} />
         </div>
         <footer className="text-center py-8 text-xs text-muted-foreground border-t mt-8">
           © 2026 glowr · All rights reserved
