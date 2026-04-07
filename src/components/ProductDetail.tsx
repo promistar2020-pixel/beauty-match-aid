@@ -101,10 +101,19 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
           </div>
           <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-1 leading-snug">{product.name}</h2>
 
-          {/* Best for */}
-          <p className="text-sm text-primary/80 font-medium mb-2">
-            Best for: {product.bestFor}
-          </p>
+          {/* Decision badge */}
+          <div className="inline-flex items-center gap-1.5 bg-primary/10 border border-primary/20 rounded-lg px-3 py-1.5 mb-2">
+            <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
+            <span className="text-xs font-semibold text-primary">Best choice for {product.bestFor.toLowerCase()}</span>
+          </div>
+
+          {/* Confidence signal */}
+          {rebuyRate >= 70 && (
+            <p className="text-[12px] text-emerald-600 font-medium mb-2 flex items-center gap-1.5">
+              <Sparkles className="w-3 h-3" />
+              Most users with similar skin saw improvement
+            </p>
+          )}
 
           <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{product.shortDescription}</p>
 
@@ -114,6 +123,12 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
               <span className="text-base font-semibold text-foreground">{product.averageRating.toFixed(1)}</span>
             </div>
             <span className="text-sm text-muted-foreground">({product.reviews.length} reviews)</span>
+          </div>
+
+          {/* CTA */}
+          <div className="bg-primary/8 border border-primary/20 rounded-xl px-4 py-2.5 mb-3 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+            <span className="text-sm font-semibold text-primary">Recommended for you</span>
           </div>
 
           <div className="flex flex-wrap gap-1.5">
@@ -134,7 +149,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
             Why people like you choose this
           </h3>
           <ul className="space-y-1.5">
-            {whyReasons.slice(0, 4).map((reason) => (
+            {whyReasons.slice(0, 3).map((reason) => (
               <li key={reason} className="flex items-start gap-2 text-sm text-foreground/80">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
                 <span>{reason}</span>
