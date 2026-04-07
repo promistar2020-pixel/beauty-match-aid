@@ -128,26 +128,28 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
           </div>
 
           {/* Purchase options */}
-          <div className="space-y-2.5 mb-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Buy now</p>
-            <div className="flex flex-wrap gap-2">
-              {["Shopee", "Amazon", "Watsons"].map((store) => (
-                <a
-                  key={store}
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground bg-accent/60 hover:bg-accent border border-border hover:border-primary/30 rounded-lg px-4 py-2 transition-colors"
-                >
-                  Buy on {store}
-                  <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                </a>
-              ))}
+          {product.buyLinks && product.buyLinks.length > 0 && (
+            <div className="space-y-2.5 mb-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Buy now</p>
+              <div className="flex flex-wrap gap-2">
+                {product.buyLinks.map((link) => (
+                  <a
+                    key={link.store}
+                    href={link.url}
+                    onClick={(e) => e.preventDefault()}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground bg-accent/60 hover:bg-accent border border-border hover:border-primary/30 rounded-lg px-4 py-2 transition-colors"
+                  >
+                    Buy on {link.store}
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                ))}
+              </div>
+              <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3" />
+                Based on reviews from users with similar skin
+              </p>
             </div>
-            <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" />
-              Based on reviews from users with similar skin
-            </p>
-          </div>
+          )}
 
           <div className="flex flex-wrap gap-1.5">
             {product.concernTags.map((tag) => (
