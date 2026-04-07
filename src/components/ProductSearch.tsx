@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
-import { products, type Product } from "@/data/mockData";
+import { getAllEnrichedProducts, type Product } from "@/data/mockData";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductSearchProps {
@@ -25,8 +25,10 @@ const ProductSearch = ({ onSelect }: ProductSearchProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
+  const allProducts = getAllEnrichedProducts();
+
   const results = query.trim().length > 0
-    ? products.filter(
+    ? allProducts.filter(
         (p) =>
           p.name.toLowerCase().includes(query.toLowerCase()) ||
           p.brand.toLowerCase().includes(query.toLowerCase())
@@ -119,7 +121,7 @@ const ProductSearch = ({ onSelect }: ProductSearchProps) => {
       {!focused && !query && (
         <div className="mt-3 flex flex-wrap gap-1.5 justify-center">
           <span className="text-[11px] text-muted-foreground">Popular:</span>
-          {products.slice(0, 3).map((p) => (
+          {allProducts.slice(0, 3).map((p) => (
             <button
               key={p.id}
               onClick={() => onSelect(p)}

@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles, CheckCircle2, ExternalLink, ShieldCheck } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
-import { SKIN_TYPES, CONCERNS, products } from "@/data/mockData";
+import { SKIN_TYPES, CONCERNS, getAllEnrichedProducts } from "@/data/mockData";
 import ReviewCard from "./ReviewCard";
 
 interface ProductDetailProps {
@@ -43,11 +43,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
 
-  const purchaseCounts = product.reviews.reduce<Record<string, number>>((acc, r) => {
-    acc[r.purchasedAt] = (acc[r.purchasedAt] || 0) + 1;
-    return acc;
-  }, {});
-  const topPurchase = Object.entries(purchaseCounts).sort((a, b) => b[1] - a[1]);
+  const allProducts = getAllEnrichedProducts();
 
   // "Why people like you choose this" insights
   const allHelpedWith = product.reviews.flatMap((r) => r.helpedWith);
