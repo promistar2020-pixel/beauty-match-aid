@@ -2,15 +2,16 @@ import { useState, useMemo } from "react";
 import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles, CheckCircle2 } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
-import { SKIN_TYPES, CONCERNS } from "@/data/mockData";
+import { SKIN_TYPES, CONCERNS, products } from "@/data/mockData";
 import ReviewCard from "./ReviewCard";
 
 interface ProductDetailProps {
   product: Product;
   onBack?: () => void;
+  onSelectProduct?: (product: Product) => void;
 }
 
-const ProductDetail = ({ product }: ProductDetailProps) => {
+const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
   const [filterSkinType, setFilterSkinType] = useState<SkinType | null>(null);
   const [filterConcern, setFilterConcern] = useState<Concern | null>(null);
 
@@ -271,6 +272,81 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
           </div>
         )}
       </div>
+
+      {/* Why this one stands out */}
+      {(() => {
+        const similarProducts = products.filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t))).slice(0, 3);
+        const avgRebuyOthers = similarProducts.length > 0
+          ? Math.round(similarProducts.reduce((sum, p) => {
+              const rb = p.reviews.filter((r) => r.wouldBuyAgain).length;
+              return sum + (rb / p.reviews.length) * 100;
+            }, 0) / similarProducts.length)
+          : 0;
+        const avgRatingOthers = similarProducts.length > 0
+          ? (similarProducts.reduce((sum, p) => sum + p.averageRating, 0) / similarProducts.length)
+          : 0;
+
+        const standoutReasons: string[] = [];
+        if (rebuyRate > avgRebuyOthers) standoutReasons.push(`Higher rebuy rate than similar products (${rebuyRate}% vs ${avgRebuyOthers}%)`);
+        if (product.averageRating > avgRatingOthers) standoutReasons.push(`Higher average rating (${product.averageRating.toFixed(1)} vs ${avgRatingOthers.toFixed(1)})`);
+        if (noNegativeSkinTypes.length > 0) standoutReasons.push(`No negative reviews from ${noNegativeSkinTypes.join(", ").toLowerCase()} skin users`);
+        if (hasNoDryness) standoutReasons.push("No dryness or irritation reported");
+
+        return standoutReasons.length > 0 ? (
+          <div className="bg-card rounded-xl border border-border p-4 mt-4">
+            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+              <Star className="w-3.5 h-3.5 text-amber-400" />
+              Why this one stands out
+            </h3>
+            <ul className="space-y-1.5">
+              {standoutReasons.slice(0, 4).map((reason) => (
+                <li key={reason} className="flex items-start gap-2 text-sm text-foreground/80">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                  <span>{reason}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null;
+      })()}
+
+      {/* Similar products */}
+      {(() => {
+        const similarProducts = products
+          .filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t)))
+          .slice(0, 3);
+
+        return similarProducts.length > 0 ? (
+          <div className="mt-6">
+            <h3 className="font-display text-base font-semibold text-foreground mb-3">Similar products</h3>
+            <div className="space-y-2.5">
+              {similarProducts.map((sp) => (
+                <div key={sp.id} className="bg-card rounded-xl border border-border p-4 flex items-center justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-foreground truncate">{sp.name}</p>
+                    <p className="text-[11px] text-muted-foreground">{sp.brand}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="flex items-center gap-0.5">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-xs font-medium text-foreground">{sp.averageRating.toFixed(1)}</span>
+                      </div>
+                      <span className="text-[11px] bg-accent/60 text-accent-foreground px-1.5 py-0.5 rounded-md font-medium">
+                        {sp.bestFor.length > 30 ? sp.bestFor.slice(0, 30) + "…" : sp.bestFor}
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onSelectProduct?.(sp)}
+                    className="text-xs font-medium text-primary hover:text-primary/80 border border-primary/30 hover:border-primary/50 rounded-lg px-3 py-1.5 transition-colors shrink-0"
+                  >
+                    View
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null;
+      })()}
     </section>
   );
 };
