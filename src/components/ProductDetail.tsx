@@ -149,7 +149,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
             Why people like you choose this
           </h3>
           <ul className="space-y-1.5">
-            {whyReasons.slice(0, 4).map((reason) => (
+            {whyReasons.slice(0, 3).map((reason) => (
               <li key={reason} className="flex items-start gap-2 text-sm text-foreground/80">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" />
                 <span>{reason}</span>
