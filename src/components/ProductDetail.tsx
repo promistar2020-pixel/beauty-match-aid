@@ -218,19 +218,21 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
             ))}
           </div>
         </div>
-        <div className="bg-card rounded-xl border border-border p-3.5">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Bought at</span>
+        {product.buyLinks && product.buyLinks.length > 0 && (
+          <div className="bg-card rounded-xl border border-border p-3.5">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Available at</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {product.buyLinks.map((link) => (
+                <span key={link.store} className="text-[11px] text-muted-foreground font-medium">
+                  {link.store}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1">
-            {topPurchase.map(([loc, count]) => (
-              <span key={loc} className="text-[11px] text-muted-foreground font-medium">
-                {loc} ({count})
-              </span>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Review filters */}
@@ -308,7 +310,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
 
       {/* Why this one stands out */}
       {(() => {
-        const similarProducts = products.filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t))).slice(0, 3);
+        const similarProducts = allProducts.filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t))).slice(0, 3);
         const avgRebuyOthers = similarProducts.length > 0
           ? Math.round(similarProducts.reduce((sum, p) => {
               const rb = p.reviews.filter((r) => r.wouldBuyAgain).length;
@@ -345,7 +347,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
 
       {/* Similar products */}
       {(() => {
-        const similarProducts = products
+        const similarProducts = allProducts
           .filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t)))
           .slice(0, 3);
 
