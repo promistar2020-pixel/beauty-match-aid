@@ -1,4 +1,4 @@
-import { Star, ShoppingBag, RefreshCw, Clock, Zap } from "lucide-react";
+import { Star, RefreshCw, Clock, Zap } from "lucide-react";
 import type { Review } from "@/data/mockData";
 
 const skinTypeBgClass: Record<string, string> = {
@@ -82,10 +82,6 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
         <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
           <Clock className="w-3 h-3" />
           {review.usagePeriod}
-        </span>
-        <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/70">
-          <ShoppingBag className="w-3 h-3" />
-          {review.purchasedAt}
         </span>
       </div>
     </div>

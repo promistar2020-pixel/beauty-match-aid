@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Star, Droplets, RefreshCw, MapPin, Users, Sparkles, CheckCircle2, ExternalLink, ShieldCheck } from "lucide-react";
 
 import type { Product, SkinType, Concern } from "@/data/mockData";
-import { SKIN_TYPES, CONCERNS, products } from "@/data/mockData";
+import { SKIN_TYPES, CONCERNS, getAllEnrichedProducts } from "@/data/mockData";
 import ReviewCard from "./ReviewCard";
 
 interface ProductDetailProps {
@@ -43,11 +43,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
 
-  const purchaseCounts = product.reviews.reduce<Record<string, number>>((acc, r) => {
-    acc[r.purchasedAt] = (acc[r.purchasedAt] || 0) + 1;
-    return acc;
-  }, {});
-  const topPurchase = Object.entries(purchaseCounts).sort((a, b) => b[1] - a[1]);
+  const allProducts = getAllEnrichedProducts();
 
   // "Why people like you choose this" insights
   const allHelpedWith = product.reviews.flatMap((r) => r.helpedWith);
@@ -132,26 +128,28 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
           </div>
 
           {/* Purchase options */}
-          <div className="space-y-2.5 mb-3">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Buy now</p>
-            <div className="flex flex-wrap gap-2">
-              {["Shopee", "Amazon", "Watsons"].map((store) => (
-                <a
-                  key={store}
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground bg-accent/60 hover:bg-accent border border-border hover:border-primary/30 rounded-lg px-4 py-2 transition-colors"
-                >
-                  Buy on {store}
-                  <ExternalLink className="w-3 h-3 text-muted-foreground" />
-                </a>
-              ))}
+          {product.buyLinks && product.buyLinks.length > 0 && (
+            <div className="space-y-2.5 mb-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Buy now</p>
+              <div className="flex flex-wrap gap-2">
+                {product.buyLinks.map((link) => (
+                  <a
+                    key={link.store}
+                    href={link.url}
+                    onClick={(e) => e.preventDefault()}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground bg-accent/60 hover:bg-accent border border-border hover:border-primary/30 rounded-lg px-4 py-2 transition-colors"
+                  >
+                    Buy on {link.store}
+                    <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                  </a>
+                ))}
+              </div>
+              <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3" />
+                Based on reviews from users with similar skin
+              </p>
             </div>
-            <p className="text-[11px] text-muted-foreground flex items-center gap-1">
-              <ShieldCheck className="w-3 h-3" />
-              Based on reviews from users with similar skin
-            </p>
-          </div>
+          )}
 
           <div className="flex flex-wrap gap-1.5">
             {product.concernTags.map((tag) => (
@@ -222,19 +220,21 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
             ))}
           </div>
         </div>
-        <div className="bg-card rounded-xl border border-border p-3.5">
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Bought at</span>
+        {product.buyLinks && product.buyLinks.length > 0 && (
+          <div className="bg-card rounded-xl border border-border p-3.5">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <MapPin className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Available at</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {product.buyLinks.map((link) => (
+                <span key={link.store} className="text-[11px] text-muted-foreground font-medium">
+                  {link.store}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-1">
-            {topPurchase.map(([loc, count]) => (
-              <span key={loc} className="text-[11px] text-muted-foreground font-medium">
-                {loc} ({count})
-              </span>
-            ))}
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Review filters */}
@@ -312,7 +312,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
 
       {/* Why this one stands out */}
       {(() => {
-        const similarProducts = products.filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t))).slice(0, 3);
+        const similarProducts = allProducts.filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t))).slice(0, 3);
         const avgRebuyOthers = similarProducts.length > 0
           ? Math.round(similarProducts.reduce((sum, p) => {
               const rb = p.reviews.filter((r) => r.wouldBuyAgain).length;
@@ -349,7 +349,7 @@ const ProductDetail = ({ product, onSelectProduct }: ProductDetailProps) => {
 
       {/* Similar products */}
       {(() => {
-        const similarProducts = products
+        const similarProducts = allProducts
           .filter((p) => p.id !== product.id && p.concernTags.some((t) => product.concernTags.includes(t)))
           .slice(0, 3);
 
