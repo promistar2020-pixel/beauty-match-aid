@@ -71,7 +71,7 @@ const ProductDetail = ({ product }: ProductDetailProps) => {
   if (noNegativeSkinTypes.length > 0) {
     whyReasons.push(`Suitable for ${noNegativeSkinTypes.join(", ").toLowerCase()} skin`);
   }
-  const noIssueKeywords = ["dryness", "irritation", "stinging", "stripping"];
+  
   const hasNoDryness = !product.reviews.some((r) =>
     r.text.toLowerCase().includes("drying") && r.rating >= 4
   );
