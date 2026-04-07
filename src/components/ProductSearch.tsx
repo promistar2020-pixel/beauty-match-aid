@@ -1,16 +1,29 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import { products, type Product } from "@/data/mockData";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ProductSearchProps {
   onSelect: (product: Product) => void;
 }
 
+const SkeletonCard = () => (
+  <div className="w-full flex items-center gap-3 px-4 py-3 border-b border-border/40 last:border-b-0">
+    <Skeleton className="w-9 h-9 rounded-lg shrink-0" />
+    <div className="flex-1 space-y-1.5">
+      <Skeleton className="h-3.5 w-3/4 rounded" />
+      <Skeleton className="h-2.5 w-1/2 rounded" />
+    </div>
+  </div>
+);
+
 const ProductSearch = ({ onSelect }: ProductSearchProps) => {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
   const results = query.trim().length > 0
     ? products.filter(
@@ -19,6 +32,18 @@ const ProductSearch = ({ onSelect }: ProductSearchProps) => {
           p.brand.toLowerCase().includes(query.toLowerCase())
       )
     : [];
+
+  // Simulate brief loading on query change
+  useEffect(() => {
+    if (query.trim().length > 0) {
+      setLoading(true);
+      clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => setLoading(false), 400);
+    } else {
+      setLoading(false);
+    }
+    return () => clearTimeout(timerRef.current);
+  }, [query]);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
