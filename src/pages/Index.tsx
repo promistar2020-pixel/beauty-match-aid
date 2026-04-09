@@ -1,5 +1,8 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { Sparkles } from "lucide-react";
 import SmartMatch from "@/components/SmartMatch";
 import SocialProof from "@/components/SocialProof";
 import ProductFeed from "@/components/ProductFeed";
@@ -7,9 +10,15 @@ import ProductDetail from "@/components/ProductDetail";
 import { getFilteredProducts, type SkinType, type Concern, type Product } from "@/data/mockData";
 
 const Index = () => {
-  const [concern, setConcern] = useState<Concern>("Acne / Breakouts");
-  const [skinType, setSkinType] = useState<SkinType>("Oily");
-  const [matched, setMatched] = useState(true);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [concern, setConcern] = useState<Concern>(
+    (searchParams.get("concern") as Concern) || "Acne / Breakouts"
+  );
+  const [skinType, setSkinType] = useState<SkinType>(
+    (searchParams.get("skinType") as SkinType) || "Oily"
+  );
+  const [matched, setMatched] = useState(!!searchParams.get("skinType"));
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [transitioning, setTransitioning] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -75,6 +84,23 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+
+      {/* Skin Test CTA */}
+      <section className="hero-gradient pt-8 pb-2 px-4 text-center">
+        <div className="max-w-md mx-auto">
+          <p className="text-xs font-medium text-primary mb-2 uppercase tracking-wider">New — Free & quick</p>
+          <Button
+            onClick={() => navigate("/skin-test")}
+            size="lg"
+            className="bg-[hsl(var(--cta-bg))] text-background hover:bg-[hsl(var(--cta-bg))]/90 text-sm font-semibold rounded-xl h-12 px-8 shadow-md"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            Take Free Skin Test
+          </Button>
+          <p className="text-xs text-muted-foreground mt-2">4 quick questions · personalized results</p>
+        </div>
+      </section>
+
       <SmartMatch
         onMatch={handleMatch}
         onProductSelect={handleProductSelect}
