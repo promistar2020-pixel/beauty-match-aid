@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Sparkles, AlertTriangle } from "lucide-react";
 import SmartMatch from "@/components/SmartMatch";
 import SocialProof from "@/components/SocialProof";
 import ProductFeed from "@/components/ProductFeed";
@@ -85,22 +85,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Skin Test CTA */}
-      <section className="hero-gradient pt-8 pb-2 px-4 text-center">
-        <div className="max-w-md mx-auto">
-          <p className="text-xs font-medium text-primary mb-2 uppercase tracking-wider">New — Free & quick</p>
-          <Button
-            onClick={() => navigate("/skin-test")}
-            size="lg"
-            className="bg-[hsl(var(--cta-bg))] text-background hover:bg-[hsl(var(--cta-bg))]/90 text-sm font-semibold rounded-xl h-12 px-8 shadow-md"
-          >
-            <Sparkles className="w-4 h-4 mr-2" />
-            Take Free Skin Test
-          </Button>
-          <p className="text-xs text-muted-foreground mt-2">4 quick questions · personalized results</p>
-        </div>
-      </section>
-
       <SmartMatch
         onMatch={handleMatch}
         onProductSelect={handleProductSelect}
@@ -108,6 +92,45 @@ const Index = () => {
         selectedSkinType={skinType}
       />
       <SocialProof />
+
+      {/* Why routines fail */}
+      <section className="px-4 py-10">
+        <div className="max-w-md mx-auto">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="w-4 h-4 text-destructive" />
+            <h2 className="text-base font-semibold text-foreground">Why most skincare routines fail</h2>
+          </div>
+          <ul className="space-y-2.5 text-sm text-muted-foreground mb-6">
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-destructive/60 shrink-0" />
+              <span><span className="text-foreground font-medium">Wrong ingredient combinations</span> — mixing actives that cancel each other out or cause irritation</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-destructive/60 shrink-0" />
+              <span><span className="text-foreground font-medium">Incorrect usage order</span> — applying products in the wrong sequence reduces absorption</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-destructive/60 shrink-0" />
+              <span><span className="text-foreground font-medium">Overuse of active ingredients</span> — too many actives damage your skin barrier over time</span>
+            </li>
+          </ul>
+
+          {/* Skin Test CTA */}
+          <div className="text-center rounded-2xl border border-border/60 bg-accent/30 p-6">
+            <p className="text-sm font-medium text-foreground mb-1">Not sure what your skin needs?</p>
+            <p className="text-xs text-muted-foreground mb-4">Find out in under 2 minutes — free & personalized</p>
+            <Button
+              onClick={() => navigate("/skin-test")}
+              size="lg"
+              className="bg-[hsl(var(--cta-bg))] text-background hover:bg-[hsl(var(--cta-bg))]/90 text-sm font-semibold rounded-xl h-12 px-8 shadow-md"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Take Free Skin Test
+            </Button>
+            <p className="text-xs text-muted-foreground mt-2">4 quick questions · personalized results</p>
+          </div>
+        </div>
+      </section>
 
       <div ref={resultsRef} className="scroll-mt-4">
         {transitioning ? (
