@@ -132,6 +132,7 @@ const Index = () => {
         </div>
       </section>
 
+      <div ref={resultsRef} className="scroll-mt-4">
         {transitioning ? (
           <div className="flex items-center justify-center py-16">
             <div className="flex flex-col items-center gap-3 animate-pulse">
