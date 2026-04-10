@@ -71,7 +71,7 @@ const SkinTest = () => {
               Your Skin Diagnosis
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-              Based on 12 behavioral indicators, here's what your skin is telling us.
+              Based on 14 behavioral indicators, here's what your skin is telling us.
             </p>
           </div>
 
@@ -81,6 +81,9 @@ const SkinTest = () => {
             <ResultRow label="Sensitivity" value={result.sensitivityLevel} />
             <ResultRow label="Barrier Condition" value={result.barrierCondition} />
             <ResultRow label="Main Concern" value={result.mainConcern} />
+            {result.isDehydrated && (
+              <ResultRow label="Dehydration" value="Detected — skin lacks water" />
+            )}
           </div>
 
           {/* Score bars */}
@@ -89,7 +92,7 @@ const SkinTest = () => {
             {(["oil", "barrier", "sensitivity", "breakouts"] as const).map((key) => {
               const m = categoryMeta[key];
               const Icon = m.icon;
-              const maxScore = key === "oil" ? 9 : key === "barrier" ? 9 : key === "sensitivity" ? 9 : 8;
+              const maxScore = key === "oil" ? 10 : key === "barrier" ? 9 : key === "sensitivity" ? 9 : 8;
               const pct = Math.max(0, Math.min(100, (result.scores[key] / maxScore) * 100));
               return (
                 <div key={key} className="flex items-center gap-3">
