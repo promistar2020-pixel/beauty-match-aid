@@ -4,47 +4,67 @@ export interface DiagnosticQuestion {
   id: string;
   category: "oil" | "barrier" | "sensitivity" | "breakouts";
   question: string;
-  options: { label: string; scores: { oil: number; barrier: number; sensitivity: number; breakouts: number } }[];
+  options: { label: string; scores: { oil: number; barrier: number; sensitivity: number; breakouts: number; dehydration?: number } }[];
 }
 
 export const diagnosticQuestions: DiagnosticQuestion[] = [
-  // — Oil Level (3 questions) —
+  // — Oil Level (6 questions) —
   {
     id: "q1",
     category: "oil",
     question: "By midday, how does your T-zone (forehead, nose, chin) feel?",
     options: [
-      { label: "Noticeably shiny or greasy", scores: { oil: 3, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Noticeably shiny or greasy", scores: { oil: 2, barrier: 0, sensitivity: 0, breakouts: 0 } },
       { label: "Slightly dewy but comfortable", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
       { label: "About the same as morning", scores: { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Tight or matte-looking", scores: { oil: -2, barrier: 1, sensitivity: 0, breakouts: 0 } },
+      { label: "Tight or matte-looking", scores: { oil: -1, barrier: 1, sensitivity: 0, breakouts: 0 } },
     ],
   },
   {
     id: "q2",
     category: "oil",
-    question: "How quickly does your face feel oily after washing?",
+    question: "When you press a tissue against your cheek in the afternoon, what happens?",
     options: [
-      { label: "Within an hour", scores: { oil: 3, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "After a few hours", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Doesn't really get oily", scores: { oil: -1, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Never — it stays dry", scores: { oil: -3, barrier: 1, sensitivity: 0, breakouts: 0 } },
+      { label: "Clear oil residue on the tissue", scores: { oil: 2, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Only oily in T-zone, cheeks are fine", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Tissue is clean", scores: { oil: -1, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Tissue picks up flaky bits", scores: { oil: -1, barrier: 2, sensitivity: 0, breakouts: 0 } },
     ],
   },
   {
     id: "q3",
     category: "oil",
-    question: "When you press a tissue against your cheek in the afternoon, what happens?",
+    question: "How quickly does your skin become shiny after cleansing (without applying products)?",
     options: [
-      { label: "Clear oil residue on the tissue", scores: { oil: 3, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Only oily in T-zone, cheeks are fine", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Tissue is clean", scores: { oil: -1, barrier: 0, sensitivity: 0, breakouts: 0 } },
-      { label: "Tissue picks up flaky bits", scores: { oil: -2, barrier: 2, sensitivity: 0, breakouts: 0 } },
+      { label: "Within 1 hour", scores: { oil: 3, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "After 2–4 hours", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Only by the end of the day", scores: { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Rarely", scores: { oil: -1, barrier: 0, sensitivity: 0, breakouts: 0 } },
+    ],
+  },
+  {
+    id: "q4",
+    category: "oil",
+    question: "How intense is the oiliness you experience?",
+    options: [
+      { label: "Very shiny / greasy", scores: { oil: 3, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Slight shine", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0 } },
+      { label: "Barely noticeable", scores: { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0 } },
+    ],
+  },
+  {
+    id: "q5",
+    category: "oil",
+    question: "Does your skin feel oily but also tight or dry?",
+    options: [
+      { label: "Yes", scores: { oil: 0, barrier: 1, sensitivity: 0, breakouts: 0, dehydration: 3 } },
+      { label: "No", scores: { oil: 1, barrier: 0, sensitivity: 0, breakouts: 0, dehydration: 0 } },
+      { label: "Not sure", scores: { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0, dehydration: 1 } },
     ],
   },
   // — Barrier / Dryness (3 questions) —
   {
-    id: "q4",
+    id: "q6",
     category: "barrier",
     question: "After cleansing, how does your skin feel before applying anything?",
     options: [
@@ -55,7 +75,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q5",
+    id: "q7",
     category: "barrier",
     question: "Do you notice rough, flaky, or peeling patches on your face?",
     options: [
@@ -65,11 +85,11 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q6",
+    id: "q8",
     category: "barrier",
-    question: "How does your skin react to rich moisturizers or facial oils?",
+    question: "How does your skin feel after applying a heavier cream (thick or nourishing moisturizer)?",
     options: [
-      { label: "Absorbs them quickly — still wants more", scores: { oil: 0, barrier: 3, sensitivity: 0, breakouts: 0 } },
+      { label: "Absorbs it quickly — still wants more", scores: { oil: 0, barrier: 3, sensitivity: 0, breakouts: 0 } },
       { label: "Feels good for a while then dries out", scores: { oil: 0, barrier: 1, sensitivity: 0, breakouts: 0 } },
       { label: "Sits comfortably without feeling heavy", scores: { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0 } },
       { label: "Feels too heavy and causes breakouts", scores: { oil: 1, barrier: -1, sensitivity: 0, breakouts: 1 } },
@@ -77,7 +97,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
   },
   // — Sensitivity (3 questions) —
   {
-    id: "q7",
+    id: "q9",
     category: "sensitivity",
     question: "When you try a new skincare product, what typically happens?",
     options: [
@@ -87,7 +107,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q8",
+    id: "q10",
     category: "sensitivity",
     question: "Does your skin turn red or sting after sun exposure, hot water, or spicy food?",
     options: [
@@ -97,7 +117,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q9",
+    id: "q11",
     category: "sensitivity",
     question: "Do you experience visible redness or flushing on your cheeks regularly?",
     options: [
@@ -108,7 +128,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
   },
   // — Breakouts (3 questions) —
   {
-    id: "q10",
+    id: "q12",
     category: "breakouts",
     question: "How often do you get pimples, whiteheads, or blackheads?",
     options: [
@@ -119,7 +139,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q11",
+    id: "q13",
     category: "breakouts",
     question: "Where do breakouts tend to appear most?",
     options: [
@@ -130,7 +150,7 @@ export const diagnosticQuestions: DiagnosticQuestion[] = [
     ],
   },
   {
-    id: "q12",
+    id: "q14",
     category: "breakouts",
     question: "Do breakouts leave dark marks or scars that linger?",
     options: [
@@ -146,19 +166,20 @@ export interface DiagnosticResult {
   sensitivityLevel: "Low" | "Moderate" | "High";
   barrierCondition: "Healthy" | "Slightly Compromised" | "Compromised";
   mainConcern: Concern;
-  scores: { oil: number; barrier: number; sensitivity: number; breakouts: number };
+  isDehydrated: boolean;
+  scores: { oil: number; barrier: number; sensitivity: number; breakouts: number; dehydration: number };
   explanation: string;
 }
 
-const categoryLabels: Record<string, string> = {
+export const categoryMeta = {
   oil: "Oil Level",
   barrier: "Skin Barrier / Dryness",
   sensitivity: "Sensitivity",
   breakouts: "Breakouts",
-};
+} as const;
 
 export function computeDiagnostic(answers: Record<string, number>): DiagnosticResult {
-  const scores = { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0 };
+  const scores = { oil: 0, barrier: 0, sensitivity: 0, breakouts: 0, dehydration: 0 };
 
   diagnosticQuestions.forEach((q) => {
     const idx = answers[q.id];
@@ -168,21 +189,30 @@ export function computeDiagnostic(answers: Record<string, number>): DiagnosticRe
       scores.barrier += s.barrier;
       scores.sensitivity += s.sensitivity;
       scores.breakouts += s.breakouts;
+      scores.dehydration += s.dehydration ?? 0;
     }
   });
 
-  // Derive skin type
+  const isDehydrated = scores.dehydration >= 2;
+
+  // Derive skin type — stricter oily thresholds, dehydration awareness
   let skinType: SkinType;
   if (scores.sensitivity >= 5) {
     skinType = "Sensitive";
-  } else if (scores.oil >= 5 && scores.barrier >= 3) {
+  } else if (isDehydrated && scores.oil >= 3) {
+    // Oily + tight/dry signals → combination, not oily
     skinType = "Combination";
-  } else if (scores.oil >= 4) {
+  } else if (scores.oil >= 7) {
+    // Only truly oily with very high, consistent oil scores
     skinType = "Oily";
-  } else if (scores.barrier >= 4) {
-    skinType = "Dry";
-  } else if (scores.oil >= 2 && scores.barrier >= 2) {
+  } else if (scores.oil >= 4 && scores.barrier >= 3) {
     skinType = "Combination";
+  } else if (scores.barrier >= 5) {
+    skinType = "Dry";
+  } else if (scores.oil >= 3 && scores.barrier >= 2) {
+    skinType = "Combination";
+  } else if (scores.barrier >= 3) {
+    skinType = "Dry";
   } else {
     skinType = "Normal";
   }
@@ -194,7 +224,7 @@ export function computeDiagnostic(answers: Record<string, number>): DiagnosticRe
     scores.barrier >= 6 ? "Compromised" : scores.barrier >= 3 ? "Slightly Compromised" : "Healthy";
 
   // Derive main concern
-  const concernMap: { key: keyof typeof scores; concern: Concern }[] = [
+  const concernMap: { key: "breakouts" | "barrier" | "sensitivity"; concern: Concern }[] = [
     { key: "breakouts", concern: "Acne / Breakouts" },
     { key: "barrier", concern: "Dryness" },
     { key: "sensitivity", concern: "Redness" },
@@ -213,13 +243,26 @@ export function computeDiagnostic(answers: Record<string, number>): DiagnosticRe
 
   // Build explanation
   const reasons: string[] = [];
-  if (skinType === "Oily") reasons.push("Your answers suggest significant oil production throughout the day, especially in the T-zone.");
-  else if (skinType === "Dry") reasons.push("Your responses indicate your skin struggles to retain moisture and often feels tight after cleansing.");
-  else if (skinType === "Combination") reasons.push("You showed signs of both excess oil in some areas and dryness in others — a classic combination pattern.");
-  else if (skinType === "Sensitive") reasons.push("Multiple answers pointed to reactive skin that flushes easily and doesn't tolerate new products well.");
-  else reasons.push("Your skin appears well-balanced with no dominant concerns — a sign of a healthy baseline.");
 
-  if (sensitivityLevel === "High") reasons.push("Your sensitivity score was elevated, meaning ingredient choices and formulation gentleness matter a lot for you.");
+  if (skinType === "Oily") {
+    reasons.push("Multiple strong indicators of oil production — fast shine after cleansing, visible greasiness throughout the day, and high oil intensity — point to genuinely oily skin.");
+  } else if (skinType === "Combination" && isDehydrated) {
+    reasons.push("Your skin shows oiliness but also tightness or dryness, which is a hallmark of dehydrated-combination skin. The oil may be your skin overproducing sebum to compensate for moisture loss, not true oiliness.");
+  } else if (skinType === "Combination") {
+    reasons.push("You showed signs of oil in some zones but dryness in others — a classic combination pattern where the T-zone and cheeks behave differently.");
+  } else if (skinType === "Dry") {
+    reasons.push("Your responses indicate your skin struggles to retain moisture, often feels tight after cleansing, and absorbs heavy creams quickly.");
+  } else if (skinType === "Sensitive") {
+    reasons.push("Multiple answers pointed to reactive skin that flushes easily and doesn't tolerate new products well.");
+  } else {
+    reasons.push("Your skin appears well-balanced with no dominant concerns — a sign of a healthy baseline.");
+  }
+
+  if (isDehydrated && skinType !== "Combination") {
+    reasons.push("We also detected signs of dehydration — your skin may lack water even if it produces enough oil. A hydrating routine could help.");
+  }
+
+  if (sensitivityLevel === "High") reasons.push("Your sensitivity score was elevated, meaning ingredient gentleness matters a lot for you.");
   if (barrierCondition === "Compromised") reasons.push("Signs of barrier damage were present — flakiness, tightness, and rapid moisture loss suggest your barrier needs repair.");
   if (scores.breakouts >= 4) reasons.push("Frequent breakouts and post-inflammatory marks indicate acne management should be a priority in your routine.");
 
@@ -228,6 +271,7 @@ export function computeDiagnostic(answers: Record<string, number>): DiagnosticRe
     sensitivityLevel,
     barrierCondition,
     mainConcern,
+    isDehydrated,
     scores,
     explanation: reasons.join(" "),
   };
